@@ -6,6 +6,7 @@ public class Racer extends Thread{
 	public int nThread;
 	private Race race;
 	
+	
 	public Racer( int nThread, Race race) {
 		thread = new Thread();
 		this.nThread = nThread;
@@ -24,6 +25,7 @@ public class Racer extends Thread{
 			}
 			System.out.println(nThread);
 		}
+		race.setResultsRace(true, this);
 	}
 
 	private int getRandomNumber() {
@@ -33,6 +35,7 @@ public class Racer extends Thread{
 		//int randomNum = min + (int)(Math.random() * ((max – min) + 1));
 		return min + (int)(Math.random() * ((max - min) + 1));
 	}
+	
 	
 
 }
