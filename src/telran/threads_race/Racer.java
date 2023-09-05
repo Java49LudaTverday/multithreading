@@ -1,16 +1,19 @@
 package telran.threads_race;
 
-public class Racer extends Thread{
+public class Racer extends Thread {
 	
 	RangeSleep rangeSleep = new RangeSleep(2, 5);
-	public int nThread;
+	private int nameThread;//number
 	private Race race;
 	
 	
-	public Racer( int nThread, Race race) {
-		this.nThread = nThread;
+	public Racer( int nameThread, Race race) {
+		this.nameThread = nameThread;
 		this.race = race;
 		
+	}
+	public int getNameThread() {
+		return nameThread;
 	}
 	
 	@Override
@@ -22,7 +25,7 @@ public class Racer extends Thread{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println(nThread);
+			System.out.println(nameThread);
 		}
 		race.setResultsRace(true, this);
 	}

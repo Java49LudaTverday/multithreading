@@ -5,22 +5,19 @@ public  class Race {
 	
 	private static int distance;
 	private static int nThreads;
-	private static ArrayList<Racer> resultsRace= new ArrayList<>();
+	private static List<Racer> resultsRace = new ArrayList<>();
 	
-	public Race() {
-		resultsRace.clear();
-	}
-	
-	public void setDistance (int distance) {
+	public Race(int nThreads, int distance) {
 		Race.distance = distance;
-	}
-	
-	public void setNThreads (int nThreads) {
 		Race.nThreads = nThreads;
+		resultsRace.clear();
 	}
 	
 	public int getDistance() {
 		return distance;
+	}
+	public int getNumberTreads() {
+		return nThreads;
 	}
 	
 	public  void printInformAboutRace() {
@@ -32,7 +29,7 @@ public  class Race {
 			resultsRace.add(racer);
 		}		
 	}
-	public ArrayList<Racer> getResults() {
+	public List<Racer> getResults() {
 		return resultsRace;
 	}
 
