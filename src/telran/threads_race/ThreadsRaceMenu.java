@@ -1,18 +1,20 @@
 package telran.threads_race;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 import telran.console.ConsoleColors;
 import telran.view.InputOutput;
 import telran.view.Item;
-import telran.view.Menu;
+
 
 public class ThreadsRaceMenu  {
 	private static final int MIN_DISTANCE = 100;
 	private static final int MAX_DISTANCE = 3500;
 	private static final int MIN_THREADS = 3;
 	private static final int MAX_THREADS = 10;
-	
+	private static final int MIN_SLEEP = 2;
+	private static final int MAX_SLEEP = 5;
 
 	public ArrayList<Item> getThreadsRaceItem() {
 		ArrayList<Item> res = new ArrayList<>(Arrays.asList(getItems()));
@@ -29,7 +31,7 @@ public class ThreadsRaceMenu  {
 		int nThreads = io.readInt("Enter number of threads: ", "must be a number ", MIN_THREADS, MAX_THREADS);
 		int distance = io.readInt("Enter distance:", "Must be a number", MIN_DISTANCE, MAX_DISTANCE);
 		
-		Race race = new Race(nThreads, distance);
+		Race race = new Race(nThreads, distance , MIN_SLEEP, MAX_SLEEP);
 		startRace(race);
 	}
 
@@ -42,11 +44,11 @@ public class ThreadsRaceMenu  {
 
 	private List<Racer> createRacers(Race race) {
 		List<Racer> racers = new ArrayList<>();
-		for (int i = 0; i < race.getNumberTreads(); i++) {
+		IntStream.range(0, race.getNumberTreads()).forEach(i -> {
 			Racer racer = new Racer(i + 1, race);
 			racer.start();
 			racers.add(racer);
-		}
+		});
 		return racers;
 	}
 	
@@ -55,7 +57,7 @@ public class ThreadsRaceMenu  {
 			try {
 				r.join();
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				throw new IllegalStateException();
 			}
 		});		
 	}	
@@ -65,32 +67,35 @@ public class ThreadsRaceMenu  {
 		race.printInformAboutRace();
 	}
 
-	private static void printResult(List<Racer> winRacer) {
+	private static void printResult(List<Racer> resultRace) {		
+		printTitle();
+		printResultTable(resultRace);		
 
+	}
+
+	private static void printTitle() {
 		System.out.printf("\n%s The RACE is ended.\n    RESULTS:%s \n\n", ConsoleColors.BLACK_BOLD,
 				ConsoleColors.RESET);
+		System.out.printf("%s Place  RacerID  Time%s\n", ConsoleColors.BLACK_BOLD, ConsoleColors.RESET);
 		
-		int firstPlace =  winRacer.get(0).getNameThread();
-		int secondPlace = winRacer.get(1).getNameThread();
-		int thirdPlace = winRacer.get(2).getNameThread();
-
-		printResultByPlace(firstPlace, secondPlace, thirdPlace);		
-		printCongratulation(firstPlace);
-
 	}
 
-	private static void printCongratulation(int firstPlace) {
-		System.out.printf("%s Congratulations to THREAD#%d! %s\n\n",ConsoleColors.BLUE_BOLD_BRIGHT
-				 ,firstPlace,  ConsoleColors.RESET);
-	}
-
-	private static void printResultByPlace(int firstPlace, int secondPlace, int thirdPlace) {
-		System.out.printf("%s  First: thread#%d%s\n", ConsoleColors.RED_BOLD_BRIGHT, firstPlace,
-				ConsoleColors.RESET);
-		System.out.printf("%s  Second: thread#%d%s\n", ConsoleColors.PURPLE, secondPlace,
-				ConsoleColors.RESET);
-		System.out.printf("%s  Third: thread#%d%s\n\n", ConsoleColors.GREEN, thirdPlace,
-				ConsoleColors.RESET);
+	private static void printResultTable(List<Racer> resultRace) {
+		int place = 1;
+		for(Racer racer: resultRace) {
+			System.out.printf(" %d%s   %d%s   %d\n", place++ , " ".repeat(4),  
+					racer.getIdThread(), " ".repeat(4),  racer.getFinishTime());
+		}
+		System.out.println();
+//		resultRace.stream().forEach(racer -> {
+//		  
+//		});
+//		System.out.printf("%s  First: thread#%d%s\n", ConsoleColors.RED_BOLD_BRIGHT, firstPlace,
+//				ConsoleColors.RESET);
+//		System.out.printf("%s  Second: thread#%d%s\n", ConsoleColors.PURPLE, secondPlace,
+//				ConsoleColors.RESET);
+//		System.out.printf("%s  Third: thread#%d%s\n\n", ConsoleColors.GREEN, thirdPlace,
+//				ConsoleColors.RESET);
 	}
 
 }

@@ -1,42 +1,60 @@
 package telran.threads_race;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 public class Racer extends Thread {
 	
-	RangeSleep rangeSleep = new RangeSleep(2, 5);
-	private int nameThread;//number
-	private Race race;
+	RangeSleep rangeSleep;
+	private int idThread;//number
+	private static Race race;
+	private long finishTime;
+	private static Object mutex = new Object();
 	
 	
-	public Racer( int nameThread, Race race) {
-		this.nameThread = nameThread;
+	public Racer( int idThread, Race race) {
+		this.idThread = idThread;
 		this.race = race;
+		rangeSleep = race.getRangeSleep();
 		
 	}
-	public int getNameThread() {
-		return nameThread;
+	public int getIdThread() {
+		return idThread;
+	}
+	public long getFinishTime() {		
+		return  finishTime;
 	}
 	
 	@Override
 	public void run () {
-		for(int i = 0; i < race.getDistance(); i++) {
-			try {
-				sleep(getRandomNumber());
-				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println(nameThread);
-		}
-		race.setResultsRace(true, this);
-	}
-
-	private int getRandomNumber() {
 		int min = rangeSleep.minValue();
 		int max = rangeSleep.maxValue();
-		//int randomNum = min + (int)(Math.random() * ((max – min) + 1));
-		return min + (int)(Math.random() * ((max - min) + 1));
+		int range = max - min + 1;
+		for(int i = 0; i < race.getDistance(); i++) {
+			try {
+				sleep(getRandomNumber(min, range));
+				
+			} catch (InterruptedException e) {
+				throw new IllegalStateException();
+			}
+			System.out.println(idThread);
+		}		
+		setResult(this);
+		finishTime = setFinishTime();
+	}
+
+	private static  void setResult(Racer race) {
+		Race.setResultsRace(race);		
 	}
 	
+	private static long setFinishTime() {
+		synchronized(mutex){
+		return ChronoUnit.MILLIS.between(race.getstartTime(), Instant.now());
+		}
+	}
 	
-
+	private int getRandomNumber(int min, int range) {		
+		//int randomNum = min + (int)(Math.random() * ((max – min) + 1));
+		return min + (int)(Math.random() * range);
+		}
 }

@@ -1,16 +1,22 @@
 package telran.threads_race;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public  class Race {
 	
 	private static int distance;
 	private static int nThreads;
-	private static List<Racer> resultsRace = new ArrayList<>();
+	private static RangeSleep rangeSleep;
+	private static List<Racer> resultsRace = new LinkedList<>();
+	private static Instant startTime;
 	
-	public Race(int nThreads, int distance) {
+	public Race(int nThreads, int distance, int minSleep, int maxSleep) {
+		resultsRace.clear();
 		Race.distance = distance;
 		Race.nThreads = nThreads;
-		resultsRace.clear();
+		rangeSleep = new RangeSleep(minSleep, maxSleep);
+		startTime = Instant.now();
 	}
 	
 	public int getDistance() {
@@ -19,15 +25,19 @@ public  class Race {
 	public int getNumberTreads() {
 		return nThreads;
 	}
+	public RangeSleep getRangeSleep() {
+		return rangeSleep;
+	}
+	public Instant getstartTime() {
+		return startTime;
+	}
 	
 	public  void printInformAboutRace() {
 		System.out.printf("Race with number of THREADS: %d  and distance: %d \n", nThreads, distance );
 	}
 	
-	public void setResultsRace(boolean canceled, Racer racer) {
-		if(canceled) {
-			resultsRace.add(racer);
-		}		
+	public static synchronized void setResultsRace(Racer racer) {		
+			resultsRace.add(racer);	
 	}
 	public List<Racer> getResults() {
 		return resultsRace;
