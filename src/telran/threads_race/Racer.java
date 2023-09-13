@@ -38,19 +38,23 @@ public class Racer extends Thread {
 				throw new IllegalStateException();
 			}
 			System.out.println(idThread);
-		}		
-		setResult(this);
-		finishTime = setFinishTime();
+		}	
+		synchronized(race) {
+			finishTime = setFinishTime();
+			setResult(this);
+		}
+//		setResult(this);
+//		finishTime = setFinishTime();
 	}
 
-	private static  void setResult(Racer race) {
-		Race.setResultsRace(race);		
+	private void setResult(Racer racer) {
+		race.setResultsRace(racer);		
 	}
 	
 	private static long setFinishTime() {
-		synchronized(mutex){
+		
 		return ChronoUnit.MILLIS.between(race.getstartTime(), Instant.now());
-		}
+		
 	}
 	
 	private int getRandomNumber(int min, int range) {		

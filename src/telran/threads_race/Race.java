@@ -36,7 +36,7 @@ public  class Race {
 		System.out.printf("Race with number of THREADS: %d  and distance: %d \n", nThreads, distance );
 	}
 	
-	public static synchronized void setResultsRace(Racer racer) {		
+	public  void setResultsRace(Racer racer) {		
 			resultsRace.add(racer);	
 	}
 	public List<Racer> getResults() {
