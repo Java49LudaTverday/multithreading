@@ -5,12 +5,11 @@ public  class Race {
 	
 	private static int distance;
 	private static int nThreads;
-	private static List<Racer> resultsRace = new ArrayList<>();
+	private int winner = -1;
 	
 	public Race(int nThreads, int distance) {
 		Race.distance = distance;
 		Race.nThreads = nThreads;
-		resultsRace.clear();
 	}
 	
 	public int getDistance() {
@@ -24,13 +23,13 @@ public  class Race {
 		System.out.printf("Race with number of THREADS: %d  and distance: %d \n", nThreads, distance );
 	}
 	
-	public void setResultsRace(boolean canceled, Racer racer) {
-		if(canceled) {
-			resultsRace.add(racer);
-		}		
+	public void setWinner(int winner) {
+		if (this.winner == -1) {
+			this.winner = winner;
+		}
 	}
-	public List<Racer> getResults() {
-		return resultsRace;
+	public int getResults() {
+		return winner;
 	}
 
 }

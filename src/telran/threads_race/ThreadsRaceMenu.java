@@ -65,17 +65,11 @@ public class ThreadsRaceMenu  {
 		race.printInformAboutRace();
 	}
 
-	private static void printResult(List<Racer> winRacer) {
+	private static void printResult(int winner) {
 
-		System.out.printf("\n%s The RACE is ended.\n    RESULTS:%s \n\n", ConsoleColors.BLACK_BOLD,
+		System.out.printf("\n%s The RACE is ended.\n", ConsoleColors.BLACK_BOLD,
 				ConsoleColors.RESET);
-		
-		int firstPlace =  winRacer.get(0).getNameThread();
-		int secondPlace = winRacer.get(1).getNameThread();
-		int thirdPlace = winRacer.get(2).getNameThread();
-
-		printResultByPlace(firstPlace, secondPlace, thirdPlace);		
-		printCongratulation(firstPlace);
+		printCongratulation(winner);
 
 	}
 
@@ -84,13 +78,5 @@ public class ThreadsRaceMenu  {
 				 ,firstPlace,  ConsoleColors.RESET);
 	}
 
-	private static void printResultByPlace(int firstPlace, int secondPlace, int thirdPlace) {
-		System.out.printf("%s  First: thread#%d%s\n", ConsoleColors.RED_BOLD_BRIGHT, firstPlace,
-				ConsoleColors.RESET);
-		System.out.printf("%s  Second: thread#%d%s\n", ConsoleColors.PURPLE, secondPlace,
-				ConsoleColors.RESET);
-		System.out.printf("%s  Third: thread#%d%s\n\n", ConsoleColors.GREEN, thirdPlace,
-				ConsoleColors.RESET);
-	}
 
 }
