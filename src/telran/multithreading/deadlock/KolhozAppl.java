@@ -1,4 +1,4 @@
-package telran.multithreading;
+package telran.multithreading.deadlock;
 
 import java.awt.MediaTracker;
 import java.time.Instant;

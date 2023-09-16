@@ -1,4 +1,4 @@
-package telran.multithreading;
+package telran.multithreading.deadlock;
 
 public class Kolhoz {
 	private long id;
