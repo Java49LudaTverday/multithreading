@@ -3,35 +3,39 @@ package telran.multithreading;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Truck extends Thread {
+	private static final long BREAKTIME = 100;
 	private int load;
-	private static AtomicLong elevator1 = new AtomicLong(0);	
-	private static AtomicLong elevator2 = new AtomicLong(0);
+	private Kolhoz kolhozFirst;
+	private Kolhoz kolhozSecond;
 	private int nLoads;
-	
-	public Truck(int load, int nLoads) {
+
+	public Truck(int load, int nLoads, Kolhoz first, Kolhoz second) {
 		this.load = load;
 		this.nLoads = nLoads;
+		this.kolhozFirst = first;
+		this.kolhozSecond = second;
 	}
-	public static long getElevator1() {
-		return elevator1.get();
-	}
-	public static long getElevator2() {
-		return elevator2.get();
-	}
+
 	@Override
 	public void run() {
 		for (int i = 0; i < nLoads; i++) {
-			loadElevator1(load);
-			loadElevator2(load);
+			synchronized (kolhozFirst) {				
+				kolhozFirst.setElevator(load);
+				//first way: example
+//				System.out.println(kolhozFirst.getElevator());
+				
+				//second way: get break for trucker
+				try {
+					sleep(BREAKTIME);
+				} catch (InterruptedException e) {
+
+				}
+				synchronized (kolhozSecond) {
+					kolhozSecond.setElevator(load);
+//					System.out.println(kolhozSecond.getElevator());
+				}
+			}
 		}
 	}
-	private static void loadElevator2(int load) {
-		elevator2.addAndGet(load);
-		
-	}
-	private static void loadElevator1(int load) {
-		elevator1.addAndGet(load);
-		
-	}
-	
+
 }
