@@ -37,7 +37,7 @@ public class ThreadsRaceMenu  {
 		printIntroduction(race);
 		List<Racer> racers = createRacers(race);
 		setJoinForRacer(racers);
-		printResult(race.getResults());
+		printResult(race);
 	}
 
 	private List<Racer> createRacers(Race race) {
@@ -62,18 +62,18 @@ public class ThreadsRaceMenu  {
 
 	private void printIntroduction(Race race) {
 		System.out.printf("%s\nThe RACE is STARTED %s\n", ConsoleColors.BLACK_BOLD, ConsoleColors.RESET);
-		race.printInformAboutRace();
+		
 	}
 
-	private static void printResult(int winner) {
-
+	private static void printResult(Race race) {
+          race.printInformAboutRace();
 		System.out.printf("\n%s The RACE is ended.\n", ConsoleColors.BLACK_BOLD,
 				ConsoleColors.RESET);
-		printCongratulation(winner);
+		printCongratulation(race.getResults());
 
 	}
 
-	private static void printCongratulation(int firstPlace) {
+	private static void printCongratulation(long firstPlace) {
 		System.out.printf("%s Congratulations to THREAD#%d! %s\n\n",ConsoleColors.BLUE_BOLD_BRIGHT
 				 ,firstPlace,  ConsoleColors.RESET);
 	}

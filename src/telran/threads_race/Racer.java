@@ -3,7 +3,7 @@ package telran.threads_race;
 public class Racer extends Thread {
 	
 	RangeSleep rangeSleep = new RangeSleep(2, 5);
-	private int idThread;//number
+	private long idThread;//number
 	private Race race;
 	
 	
@@ -12,7 +12,7 @@ public class Racer extends Thread {
 		this.race = race;
 		
 	}
-	public int getIdThread() {
+	public long getIdThread() {
 		return idThread;
 	}
 	

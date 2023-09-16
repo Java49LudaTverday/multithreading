@@ -1,11 +1,12 @@
 package telran.threads_race;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public  class Race {
 	
 	private static int distance;
 	private static int nThreads;
-	private int winner = -1;
+	private AtomicLong winnerId = new AtomicLong(-1);
 	
 	public Race(int nThreads, int distance) {
 		Race.distance = distance;
@@ -23,13 +24,11 @@ public  class Race {
 		System.out.printf("Race with number of THREADS: %d  and distance: %d \n", nThreads, distance );
 	}
 	
-	public void setWinner(int winner) {
-		if (this.winner == -1) {
-			this.winner = winner;
-		}
+	public void setWinner(long winner) {
+		winnerId.compareAndSet(-1, winner);
 	}
-	public int getResults() {
-		return winner;
+	public long getResults() {
+		return winnerId.get();
 	}
 
 }
