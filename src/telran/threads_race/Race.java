@@ -6,7 +6,7 @@ public  class Race {
 	
 	private static int distance;
 	private static int nThreads;
-	private AtomicLong winnerId = new AtomicLong(-1);
+	public AtomicLong winnerId = new AtomicLong(-1);
 	
 	public Race(int nThreads, int distance) {
 		Race.distance = distance;
@@ -24,9 +24,7 @@ public  class Race {
 		System.out.printf("Race with number of THREADS: %d  and distance: %d \n", nThreads, distance );
 	}
 	
-	public void setWinner(long winner) {
-		winnerId.compareAndSet(-1, winner);
-	}
+	
 	public long getResults() {
 		return winnerId.get();
 	}

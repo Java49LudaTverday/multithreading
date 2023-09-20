@@ -27,7 +27,7 @@ public class Racer extends Thread {
 			}
 			System.out.println(idThread);
 		}
-		race.setWinner(idThread);
+		race.winnerId.compareAndSet(-1, idThread);
 	}
 
 	private int getRandomNumber() {
