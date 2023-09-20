@@ -9,10 +9,10 @@ import telran.view.Item;
 
 
 public class ThreadsRaceMenu  {
-	private static final int MIN_DISTANCE = 100;
+	private static final int MIN_DISTANCE = 10;
 	private static final int MAX_DISTANCE = 3500;
 	private static final int MIN_THREADS = 3;
-	private static final int MAX_THREADS = 10;
+	private static final int MAX_THREADS = 100_000;
 	private static final int MIN_SLEEP = 2;
 	private static final int MAX_SLEEP = 5;
 
@@ -81,21 +81,20 @@ public class ThreadsRaceMenu  {
 	}
 
 	private static void printResultTable(List<Racer> resultRace) {
-		int place = 1;
-		for(Racer racer: resultRace) {
-			System.out.printf(" %d%s   %d%s   %d\n", place++ , " ".repeat(4),  
-					racer.getIdThread(), " ".repeat(4),  racer.getFinishTime());
+//		int place = 1;
+//		for(Racer racer: resultRace) {
+//			System.out.printf(" %d%s   %d%s   %d\n", place++ , " ".repeat(4),  
+//					racer.getIdThread(), " ".repeat(4),  racer.getFinishTime());
+//		}
+//		System.out.println();
+		int size= resultRace.size();
+		int count = 0;
+		for(int i = 1; i < size; i++) {
+			if(resultRace.get(i-1).getFinishTime() > resultRace.get(i).getFinishTime()) {
+				count++;
+			}
 		}
-		System.out.println();
-//		resultRace.stream().forEach(racer -> {
-//		  
-//		});
-//		System.out.printf("%s  First: thread#%d%s\n", ConsoleColors.RED_BOLD_BRIGHT, firstPlace,
-//				ConsoleColors.RESET);
-//		System.out.printf("%s  Second: thread#%d%s\n", ConsoleColors.PURPLE, secondPlace,
-//				ConsoleColors.RESET);
-//		System.out.printf("%s  Third: thread#%d%s\n\n", ConsoleColors.GREEN, thirdPlace,
-//				ConsoleColors.RESET);
+		System.out.printf("Count of wrong places: %d", count);
 	}
 
 }

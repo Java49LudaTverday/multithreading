@@ -38,9 +38,9 @@ public class Racer extends Thread {
 				throw new IllegalStateException();
 			}
 			System.out.println(idThread);
-		}	
-		synchronized(race) {
-			finishTime = setFinishTime();
+		}
+		finishTime = setFinishTime();
+		synchronized(race) {			
 			setResult(this);
 		}
 //		setResult(this);
