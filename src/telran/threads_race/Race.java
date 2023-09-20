@@ -2,6 +2,7 @@ package telran.threads_race;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.locks.*;
 
 public  class Race {
 	
@@ -9,6 +10,7 @@ public  class Race {
 	private static int nThreads;
 	private static RangeSleep rangeSleep;
 	private static List<Racer> resultsRace = new LinkedList<>();
+	final Lock lock = new ReentrantLock(true);
 	private static Instant startTime;
 	
 	public Race(int nThreads, int distance, int minSleep, int maxSleep) {

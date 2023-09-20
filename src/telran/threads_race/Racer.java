@@ -39,12 +39,13 @@ public class Racer extends Thread {
 			}
 			System.out.println(idThread);
 		}	
-		synchronized(race) {
+		try {
+			race.lock.lock();
 			finishTime = setFinishTime();
 			setResult(this);
+		} finally {
+			race.lock.unlock();
 		}
-//		setResult(this);
-//		finishTime = setFinishTime();
 	}
 
 	private void setResult(Racer racer) {
