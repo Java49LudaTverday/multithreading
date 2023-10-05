@@ -9,6 +9,9 @@ public class Receiver extends Thread {
 		setDaemon(true);//FIXME
 		this.messageBox = message;
 	}
+	public void setMessageBox(MessageBox messageBox) {
+		this.messageBox = messageBox;
+	}
 	@Override
 	public void run() {
 		while(true) {//FIXME
