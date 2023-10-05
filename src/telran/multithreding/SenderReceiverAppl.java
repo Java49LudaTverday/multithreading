@@ -1,7 +1,5 @@
 package telran.multithreding;
 
-import java.util.ArrayList;
-
 import telran.multithreding.consumer.Receiver;
 import telran.multithreding.messaging.MessageBox;
 import telran.multithreding.producer.Sender;
