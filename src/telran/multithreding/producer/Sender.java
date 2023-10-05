@@ -17,8 +17,7 @@ public class Sender extends Thread {
 				messageBox.put("message" + i);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
-			
+			}			
 		}
 	}
 	

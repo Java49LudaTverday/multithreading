@@ -13,18 +13,21 @@ public class Receiver extends Thread {
 	}
 	public void stopReceiver() {
 		running = false;
-		System.out.println("false");
 	}
 	@Override
 	public void run() {
-		while(running) {//FIXME
-			try {
+		try {
+		while(running) {//FIXME			
 				String message = messageBox.get();
-				System.out.printf("Thread %d has got message: %s\n", getId(), message);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("true");
+				if(message == "stop" ) {
+					stopReceiver();
+				} else {
+					System.out.printf("Thread %d has got message: %s\n", getId(), message);
+				}				
+		}
+			messageBox.put("stop");
+		} catch (InterruptedException e) {			
+			e.printStackTrace();
 		}
 	}
 	
