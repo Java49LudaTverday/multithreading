@@ -1,25 +1,40 @@
 package telran.multithreding.messaging;
 
+import java.util.concurrent.locks.*;
+
 public class MessageBox {
 	private String message;
+	private ReentrantLock lock = new ReentrantLock();
+	private Condition waitingForConsuming = lock.newCondition();
+	private Condition waitingForProducing = lock.newCondition();
 
-	public synchronized void put(String message) throws InterruptedException {
-		while (this.message != null) {
-			this.wait();
+	public void put(String message) throws InterruptedException {
+		try {
+			lock.lock();
+			while (this.message != null) {
+				waitingForProducing.await();
+			}
+			this.message = message;
+			waitingForConsuming.signal();
+		} finally {
+			lock.unlock();
 		}
-		this.message = message;
-		this.notify();// or notify() without this
 
 	}
 
-	public synchronized String get() throws InterruptedException {
-		while (message == null) {
-			this.wait();
+	public String get() throws InterruptedException {
+		try {
+			lock.unlock();
+			while (message == null) {
+				waitingForConsuming.await();
+			}
+			String res = message;
+			message = null;
+			waitingForProducing.signal();
+			return res;
+		} finally {
+			lock.unlock();
 		}
-		String res = message;
-		message = null;
-		this.notifyAll();	
-		return res;
 	}
 
 	public String take() {
