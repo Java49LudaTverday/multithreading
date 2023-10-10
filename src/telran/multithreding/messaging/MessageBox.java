@@ -1,29 +1,22 @@
 package telran.multithreding.messaging;
 
-public class MessageBox {
-	private String message;
+import java.util.concurrent.*;
 
-	public synchronized void put(String message) throws InterruptedException {
-		while (this.message != null) {
-			this.wait();
-		}
-		this.message = message;
-		this.notify();// or notify() without this
+public class MessageBox {
+	private MyBlockingQueue<String> queue = new MyLinkedBlockingQueue<>(1);
+
+	public void put(String message) throws InterruptedException {
+		queue.put(message);
 
 	}
 
-	public synchronized String get() throws InterruptedException {
-		while (message == null) {
-			this.wait();
-		}
-		String res = message;
-		message = null;
-		this.notifyAll();	
-		return res;
+	public  String get() throws InterruptedException {
+		
+		return queue.take();
 	}
 
 	public String take() {
-		return message;// may be null
+		return queue.poll();// may be null
 	}
 
 }
