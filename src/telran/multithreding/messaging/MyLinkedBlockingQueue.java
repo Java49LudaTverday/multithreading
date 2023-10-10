@@ -47,11 +47,17 @@ public class MyLinkedBlockingQueue<E> implements MyBlockingQueue<E> {
 
 	@Override
 	public boolean offer(E e, long timeout, TimeUnit unit) throws InterruptedException {
-		long timeOutMillis = unit.toMillis(timeout);
-		if(queue.size() == limit) {
-			wait(timeOutMillis);
+		try {
+			lock.lock();
+			if (queue.size() == limit) {
+				waitingForProducing.await(timeout, unit);
+			}
+			boolean res = offer(e);
+			waitingForConsuming.signal();
+			return res;
+		} finally {
+			lock.unlock();
 		}
-		return offer(e);
 	}
 
 	@Override
@@ -71,12 +77,17 @@ public class MyLinkedBlockingQueue<E> implements MyBlockingQueue<E> {
 
 	@Override
 	public E poll(long timeout, TimeUnit unit) throws InterruptedException {
-		long timeOutMillis = unit.toMillis(timeout);
-		if(queue.isEmpty()) {
-			wait(timeOutMillis);
+		try {
+			lock.lock();
+			if (queue.isEmpty()) {
+				waitingForConsuming.await(timeout, unit);
+			}
+			E res = poll();
+			waitingForProducing.signal();
+			return res;
+		} finally {
+			lock.unlock();
 		}
-		
-		return poll();
 	}
 
 	@Override
