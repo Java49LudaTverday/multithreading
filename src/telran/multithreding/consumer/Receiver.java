@@ -4,32 +4,28 @@ import telran.multithreding.messaging.MessageBox;
 
 public class Receiver extends Thread {
 	private MessageBox messageBox;
-	private boolean running;
 
-	public Receiver(MessageBox message) {
-//		setDaemon(true);//FIXME
-		this.messageBox = message;
-		running = true;
-	}
-	public void stopReceiver() {
-		running = false;
+	public Receiver(MessageBox messageBox) {
+		this.messageBox = messageBox;
 	}
 	@Override
 	public void run() {
+		String message = null;
 		try {
-		while(running) {//FIXME			
-				String message = messageBox.get();
-				if(message == "stop" ) {
-					stopReceiver();
-				} else {
-					System.out.printf("Thread %d has got message: %s\n", getId(), message);
-				}				
+			while(true) {//FIXME
+			
+				message = messageBox.get();
+				messageProcessing(message);
+			
 		}
-			messageBox.put("stop");
-		} catch (InterruptedException e) {			
-			e.printStackTrace();
-		}
+			} catch (InterruptedException e) {
+				message = messageBox.take(); 
+				while((message = messageBox.take()) != null ) {
+					messageProcessing(message);
+				}
+			}
 	}
-	
-
+	private void messageProcessing(String message) {
+		System.out.printf("Thread %d has got message: %s\n", getId(), message);
+	}
 }
